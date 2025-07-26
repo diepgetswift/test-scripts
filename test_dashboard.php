@@ -15,6 +15,11 @@ echo 'update_overview' . PHP_EOL;
 $stat->update_overview();
 
 echo date('H:i:s') . ' ';
+echo 'prepareRecurringData' . PHP_EOL;
+
+$stat->updateRecurringData();
+
+echo date('H:i:s') . ' ';
 echo 'update_sales_stat' . PHP_EOL;
 // Sales stats
 $stat->update_sales_stat();
