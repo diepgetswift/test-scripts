@@ -1,4 +1,5 @@
 <?php 
+require "../auth.php";
 
 $sourceRouteId = 18;
 $destinationRoute = 15;
@@ -8,9 +9,9 @@ $usernames = [
 ];
 
 foreach ($usernames as $username) {
-    $check1 = func_query_first_cell("SELECT * FROM dbp_users_routes where login = '{$username}' AND route_ud = '{$sourceRouteId}'");
-    $check2 = func_query_first_cell("SELECT * FROM dbp_users_routes where login = '{$username}' AND route_ud = '{$destinationRoute}'");
-    $check3 = func_query_first_cell("SELECT * FROM dbp_orders where login = '{$username}' AND route_ud = '{$destinationRoute}' AND date > unix_timestamp()");
+    $check1 = func_query_first_cell("SELECT * FROM dbp_users_routes where login = '{$username}' AND route_id = '{$sourceRouteId}'");
+    $check2 = func_query_first_cell("SELECT * FROM dbp_users_routes where login = '{$username}' AND route_id = '{$destinationRoute}'");
+    $check3 = func_query_first_cell("SELECT * FROM dbp_orders where login = '{$username}' AND route_id = '{$destinationRoute}' AND date > unix_timestamp()");
     
     if (!$check1 || !$check2 || $check3) {
         echo "Validateion fail" . $username . PHP_EOL;
