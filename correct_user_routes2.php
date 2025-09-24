@@ -5,7 +5,7 @@ $sourceRouteId = 18;
 $destinationRoute = 15;
 
 $usernames = [
-    "clairesorrels@gmail.com"
+    "Lisamarieclark816@gmail.com"
 ];
 
 foreach ($usernames as $username) {
@@ -22,7 +22,8 @@ foreach ($usernames as $username) {
     $userinfo->move_user_orders($sourceRouteId, $destinationRoute, true, false);
 
     // Copy recurring order
-    $userinfo->copy_recurring_order($sourceRouteId, $destinationRoute, true);
+    //$userinfo->copy_recurring_order($sourceRouteId, $destinationRoute, true);
+    db_query("update dbp_recuring_orders set route_id = {$destinationRoute} where login = '{$username}' AND route_id = {$sourceRouteId}");
     
     $userinfo->unassign_from_route($sourceRouteId);
 }
