@@ -6,7 +6,7 @@ echo "start " . date('H:i:s') . PHP_EOL;
 $date = strtotime('2025-01-01');
 
 $dayStart = strtotime('-3 months');
-$dayEnd = func_set_time_on_date(time(), 23, 59, 59);
+$dayEnd = strtotime('+1 month');
 
 \dbp::get_instance()->db()->connection()->exec("TRUNCATE TABLE {$sql_tbl['today_delivery_customers']}");
 db_query("INSERT INTO {$sql_tbl['today_delivery_customers']} (SELECT DISTINCT c.customer_id FROM {$sql_tbl['customers']} c INNER JOIN {$sql_tbl['orders']} o ON c.login = o.login WHERE o.date > {$dayStart} and o.date < {$dayEnd})");
