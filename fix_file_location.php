@@ -13,6 +13,7 @@ foreach ($images as $i) {
         $newPath = str_replace('/files', '/files/Product Tile Images', $path);
         if (file_exists($dbp_dir . $newPath)) {
             echo 'file moved';
+            db_query("update dbp_thumbnails set image_path = '{$newPath}' where productid = {$i['productid']}");
         } else {
             echo 'file deleted';
         }
