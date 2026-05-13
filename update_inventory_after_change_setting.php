@@ -15,6 +15,5 @@ $productIds = db_query_builder()
             
 foreach($productIds as $productid) {
     echo $productid . PHP_EOL;
-    die;
     func_update_product_inventory($productid, 0, true, true);
 }
