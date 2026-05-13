@@ -53,6 +53,8 @@ function autoSelectBox($user, $routeId, $deliveryDate) {
             foreach ($products as $product) {
                 if ($order->addProduct($product, 1)) {
                     break;
+                } else {
+                    echo $order->get_last_error();
                 }
             }
             
@@ -70,3 +72,5 @@ $routeIds = $userinfo->get_assigned_routes();
 $routeId = $routeIds[0];
 
 $deliveryDate = $userinfo->get_next_delivery_date($routeId);
+
+autoSelectBox($login, $routeId, $deliveryDate);
