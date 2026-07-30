@@ -3,7 +3,7 @@ require "../auth.php";
 
 use DBP\Module\CreditSubscription\Service\AutoSpendCreditService;
 
-$users = ['testbbekele40', 'testbbekele41', 'testbbekele42'];
+$users = ['testbbekele43'];
 
 foreach ($users as $user) {
     $userinfo = \Userinfo_factory::get($user);
@@ -19,6 +19,9 @@ foreach ($users as $user) {
     echo "Delivery date: " . date('Y-m-d', $deliveryDate) . "\n\n";
 
     $result = AutoSpendCreditService::selectBox($user, $routeId, $deliveryDate);
+    if ($result) {
+        AutoSpendCreditService::populateBox($user, $routeId, $deliveryDate);
+    }
 
     echo "selectBox result: " . ($result ? 'box selected (true)' : 'no box selected (false)') . "\n";
 }
