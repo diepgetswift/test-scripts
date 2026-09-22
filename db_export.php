@@ -62,6 +62,12 @@ if (!$fh) {
 
 function w($fh, $s) { fwrite($fh, $s); }
 
+// Strip DEFINER=`user`@`host` so restoring on another server/user doesn't
+// fail (or silently reassign ownership) when that account doesn't exist there.
+function stripDefiner($sql) {
+    return preg_replace('/DEFINER\s*=\s*`[^`]*`@`[^`]*`\s*/i', '', $sql, 1);
+}
+
 // ---- Header ----
 w($fh, "-- PHP-generated dump (mysqldump-compatible) of `$db`\n");
 w($fh, "-- Host: $host   Generated: " . date('Y-m-d H:i:s') . "\n\n");
@@ -164,7 +170,7 @@ foreach ($views as $view) {
 
     $createRes = $mysqli->query("SHOW CREATE VIEW `$view`");
     $createRow = $createRes->fetch_array(MYSQLI_NUM);
-    w($fh, $createRow[1] . ";\n\n");
+    w($fh, stripDefiner($createRow[1]) . ";\n\n");
     $createRes->free();
 }
 
@@ -188,7 +194,7 @@ if ($triggers) {
 
         w($fh, "DROP TRIGGER IF EXISTS `$trig`;\n");
         w($fh, "DELIMITER ;;\n");
-        w($fh, $row['SQL Original Statement'] . ";;\n");
+        w($fh, stripDefiner($row['SQL Original Statement']) . ";;\n");
         w($fh, "DELIMITER ;\n\n");
     }
 }
@@ -213,7 +219,7 @@ if ($procs) {
 
         w($fh, "DROP PROCEDURE IF EXISTS `$proc`;\n");
         w($fh, "DELIMITER ;;\n");
-        w($fh, $row['Create Procedure'] . ";;\n");
+        w($fh, stripDefiner($row['Create Procedure']) . ";;\n");
         w($fh, "DELIMITER ;\n\n");
     }
 }
@@ -238,7 +244,7 @@ if ($funcs) {
 
         w($fh, "DROP FUNCTION IF EXISTS `$func`;\n");
         w($fh, "DELIMITER ;;\n");
-        w($fh, $row['Create Function'] . ";;\n");
+        w($fh, stripDefiner($row['Create Function']) . ";;\n");
         w($fh, "DELIMITER ;\n\n");
     }
 }
@@ -263,7 +269,7 @@ if ($events) {
 
         w($fh, "DROP EVENT IF EXISTS `$ev`;\n");
         w($fh, "DELIMITER ;;\n");
-        w($fh, $row['Create Event'] . ";;\n");
+        w($fh, stripDefiner($row['Create Event']) . ";;\n");
         w($fh, "DELIMITER ;\n\n");
     }
 }
